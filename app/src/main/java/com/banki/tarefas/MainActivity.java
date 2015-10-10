@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.banki.tarefas.adapter.TarefaAdapter;
+import com.banki.tarefas.dao.TarefaDAO;
 import com.banki.tarefas.model.Tarefa;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ArrayList<Tarefa> tarefas = new ArrayList<Tarefa>();
+    TarefaDAO dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,23 +31,44 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        initAddButton();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dao = new TarefaDAO(this);
+        loadData();
+        initRecyclerView();
+    }
+
+    private void loadData() {
+        tarefas = dao.listaTarefas();
+    }
+
+    private void initAddButton() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addBtn);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Tarefa t1 = new Tarefa("Tarefa adicionada");
+                dao.inserir(t1);
+                tarefas.add(t1);
+                updateRecyclerView();
             }
         });
+    }
 
-        createSampleData();
-
+    private void initRecyclerView() {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
+        updateRecyclerView();
+    }
 
+    private void updateRecyclerView() {
         recyclerView.setAdapter(new TarefaAdapter(this, tarefas, onClickTarefa()));
     }
 
@@ -54,37 +77,48 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClickTarefa(View view, int index){
                 Tarefa tarefa = tarefas.get(index);
-                //Intent intent = new Intent(MainActivity.this, TarefaActivity.class);
-                //intent.putExtra("tarefa", tarefa);
-                //startActivity(intent);
+                dao.apagar(tarefa);
+                tarefas.remove(tarefa);
+                updateRecyclerView();
             }
         };
     }
 
     private void createSampleData() {
-        tarefas.add(new Tarefa());
-        tarefas.add(new Tarefa());
-        tarefas.add(new Tarefa());
-        tarefas.add(new Tarefa());
+        Tarefa t1 = new Tarefa("Pagar cartão");
+        dao.inserir(t1);
+        tarefas.add(t1);
+
+        Tarefa t2 = new Tarefa("Renovar seguro do carro");
+        dao.inserir(t2);
+        tarefas.add(t2);
+
+        updateRecyclerView();
+    }
+
+    private void resetData() {
+        dao.limparTudo();
+        tarefas = new ArrayList<Tarefa>();
+        createSampleData();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_sample) {
+            createSampleData();
+        }
+        else if (id == R.id.action_destroy) {
+            resetData();
         }
 
         return super.onOptionsItemSelected(item);

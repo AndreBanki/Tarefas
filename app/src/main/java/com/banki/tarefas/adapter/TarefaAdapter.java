@@ -42,7 +42,7 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefasVie
         Tarefa c = tarefas.get(position);
         //holder.data.setText(new SimpleDateFormat("dd").format(c.getDataCorrida()));
         //holder.mes.setText(new SimpleDateFormat("MMM").format(c.getDataCorrida()));
-        //holder.firstLine.setText(c.getCidade() + "/" + c.getEstado());
+        holder.firstLine.setText(c.getDescricao());
         //holder.secondLine.setText(c.getNomeCorrida());
 
         if (tarefaOnClickListener != null){
