@@ -17,11 +17,12 @@ import com.banki.tarefas.dao.TarefaDAO;
 import com.banki.tarefas.model.Tarefa;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private ArrayList<Tarefa> tarefas = new ArrayList<Tarefa>();
+    private ArrayList<Tarefa> tarefas = new ArrayList<>();
     TarefaDAO dao;
 
     @Override
@@ -51,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Tarefa t1 = new Tarefa("Tarefa adicionada");
+                Tarefa t1 = new Tarefa();
+                t1.setDescricao("Tarefa adicionada");
                 dao.inserir(t1);
                 tarefas.add(t1);
                 updateRecyclerView();
@@ -85,11 +87,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createSampleData() {
-        Tarefa t1 = new Tarefa("Pagar cartão");
+        Tarefa t1 = new Tarefa();
+        t1.setDescricao("Pagar cartão");
+        Calendar cal = Calendar.getInstance();
+        t1.setDueDate(cal.getTimeInMillis());
+        t1.setReminder(true);
+        t1.setReminderMinutes(10);
         dao.inserir(t1);
         tarefas.add(t1);
 
-        Tarefa t2 = new Tarefa("Renovar seguro do carro");
+        Tarefa t2 = new Tarefa();
+        t2.setDescricao("Renovar seguro do carro");
         dao.inserir(t2);
         tarefas.add(t2);
 
@@ -98,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void resetData() {
         dao.limparTudo();
-        tarefas = new ArrayList<Tarefa>();
+        tarefas = new ArrayList<>();
         createSampleData();
     }
 

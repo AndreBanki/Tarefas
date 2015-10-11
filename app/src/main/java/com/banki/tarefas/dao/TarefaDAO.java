@@ -20,7 +20,7 @@ public class TarefaDAO {
     }
 
     public ArrayList<Tarefa> listaTarefas() {
-        ArrayList<Tarefa> tarefas = new ArrayList<Tarefa>();
+        ArrayList<Tarefa> tarefas = new ArrayList<>();
         String[] colunas = new String[]{
                 Tarefa._ID,
                 Tarefa.DESCRICAO,
@@ -34,12 +34,13 @@ public class TarefaDAO {
         c.moveToFirst();
         int nTarefas = c.getCount();
         for (int i = 0; i < nTarefas; i++) {
-            Tarefa tarefa = new Tarefa("");
+            Tarefa tarefa = new Tarefa();
             tarefa.setId(c.getInt(0));
             tarefa.setDescricao(c.getString(1));
             tarefa.setCompleted(c.getInt(2));
             tarefa.setDueDate(c.getInt(3));
             tarefa.setReminder(c.getInt(4));
+            tarefa.setReminderMinutes(c.getInt(5));
 
             tarefas.add(tarefa);
             c.moveToNext();
@@ -53,7 +54,7 @@ public class TarefaDAO {
         valores.put(Tarefa.COMPLETED, tarefa.isCompleted());
         valores.put(Tarefa.DESCRICAO, tarefa.getDescricao());
         valores.put(Tarefa.DUEDATE, tarefa.getDueDate());
-        valores.put(Tarefa.REMINDER, tarefa.isReminder());
+        valores.put(Tarefa.REMINDER, tarefa.hasReminder());
         valores.put(Tarefa.REMINDERMINUTES, tarefa.getReminderMinutes());
         db.insert(SQLiteHelper.TABELA, null, valores);
     }

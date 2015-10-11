@@ -6,7 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -39,11 +42,26 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefasVie
 
     @Override
     public void onBindViewHolder(final TarefasViewHolder holder, final int position){
-        Tarefa c = tarefas.get(position);
-        //holder.data.setText(new SimpleDateFormat("dd").format(c.getDataCorrida()));
-        //holder.mes.setText(new SimpleDateFormat("MMM").format(c.getDataCorrida()));
-        holder.firstLine.setText(c.getDescricao());
-        //holder.secondLine.setText(c.getNomeCorrida());
+        Tarefa tarefa = tarefas.get(position);
+        holder.firstLine.setText(tarefa.getDescricao());
+
+        String msgAlarme = "";
+        if (tarefa.hasReminder())
+            msgAlarme = "Avisar " + tarefa.getReminderMinutes() + " minutos antes";
+        holder.secondLine.setText(msgAlarme);
+
+        String data = "";
+        String hora = "";
+        if (tarefa.getDueDate() != 0) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(tarefa.getDueDate());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MMM", Locale.getDefault());
+            data = dateFormat.format(cal.getTime());
+            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm", Locale.getDefault());
+            hora = timeFormat.format(cal.getTime());
+        }
+        holder.data.setText(data);
+        holder.hora.setText(hora);
 
         if (tarefaOnClickListener != null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -63,13 +81,13 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefasVie
         public TextView firstLine;
         public TextView secondLine;
         public TextView data;
-        public TextView mes;
+        public TextView hora;
         CardView cardView;
 
         public TarefasViewHolder(View view){
             super(view);
             data = (TextView) view.findViewById(R.id.data);
-            mes = (TextView) view.findViewById(R.id.mes);
+            hora = (TextView) view.findViewById(R.id.hora);
             firstLine = (TextView) view.findViewById(R.id.firstLine);
             secondLine = (TextView) view.findViewById(R.id.secondLine);
             cardView = (CardView) view.findViewById(R.id.card_view);

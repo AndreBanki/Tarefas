@@ -18,10 +18,10 @@ public class Tarefa {
     private boolean reminder;
     private int reminderMinutes;
 
-    public Tarefa(String descricao) {
+    public Tarefa() {
         this.id = 0;
         this.completed = false;
-        this.descricao = descricao;
+        this.descricao = "";
         this.dueDate = 0;
         this.reminder = false;
         reminderMinutes = 0;
@@ -44,10 +44,7 @@ public class Tarefa {
     }
 
     public void setCompleted(int completed) {
-        if (completed == 0)
-            this.completed = false;
-        else
-            this.completed = true;
+        this.completed = completed != 0;
     }
 
     public String getDescricao() {
@@ -66,7 +63,7 @@ public class Tarefa {
         this.dueDate = dueDate;
     }
 
-    public boolean isReminder() {
+    public boolean hasReminder() {
         return reminder;
     }
 
@@ -75,10 +72,7 @@ public class Tarefa {
     }
 
     public void setReminder(int reminder) {
-        if (reminder == 0)
-            this.reminder = false;
-        else
-            this.reminder = true;
+        this.reminder = reminder != 0;
     }
 
     public int getReminderMinutes() {
