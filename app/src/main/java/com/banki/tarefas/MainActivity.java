@@ -1,6 +1,7 @@
 package com.banki.tarefas;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -82,8 +83,25 @@ public class MainActivity extends AppCompatActivity {
                 dao.apagar(tarefa);
                 tarefas.remove(tarefa);
                 updateRecyclerView();
+                criaSnackBarOpcaoDesfazer(tarefa);
             }
         };
+    }
+
+    private void criaSnackBarOpcaoDesfazer(final Tarefa tarefa) {
+        final CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainLayout);
+        Snackbar snackbar = Snackbar
+                .make(coordinatorLayout, "Tarefa concluída!", Snackbar.LENGTH_INDEFINITE)
+                .setAction("DESFAZER", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        tarefa.setId(0);
+                        dao.inserir(tarefa);
+                        tarefas.add(tarefa);
+                        updateRecyclerView();
+                    }
+                });
+        snackbar.show();
     }
 
     private void createSampleData() {
