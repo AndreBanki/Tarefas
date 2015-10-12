@@ -1,8 +1,8 @@
 package com.banki.tarefas.model;
 
-import java.util.Date;
+import java.io.Serializable;
 
-public class Tarefa {
+public class Tarefa implements Serializable {
 
     public static String _ID = "_id";
     public static String COMPLETED = "completed";

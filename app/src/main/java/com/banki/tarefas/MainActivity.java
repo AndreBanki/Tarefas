@@ -1,5 +1,6 @@
 package com.banki.tarefas;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +23,7 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_TAREFA = 0;
     private RecyclerView recyclerView;
     private ArrayList<Tarefa> tarefas = new ArrayList<>();
     TarefaDAO dao;
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         initAddButton();
+        initRecyclerView();
     }
 
     @Override
@@ -41,11 +44,23 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         dao = new TarefaDAO(this);
         loadData();
-        initRecyclerView();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_TAREFA) {
+            if (resultCode == RESULT_OK) {
+                Tarefa tarefa = (Tarefa)data.getSerializableExtra("tarefa");
+                dao.inserir(tarefa);
+                tarefas.add(tarefa);
+                updateRecyclerView();
+            }
+        }
     }
 
     private void loadData() {
         tarefas = dao.listaTarefas();
+        updateRecyclerView();
     }
 
     private void initAddButton() {
@@ -53,11 +68,10 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Tarefa t1 = new Tarefa();
-                t1.setDescricao("Tarefa adicionada");
-                dao.inserir(t1);
-                tarefas.add(t1);
-                updateRecyclerView();
+                Tarefa t = new Tarefa();
+                Intent intent = new Intent(MainActivity.this, TarefaActivity.class);
+                intent.putExtra("tarefa", t);
+                startActivityForResult(intent, REQUEST_TAREFA);
             }
         });
     }
@@ -125,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
     private void resetData() {
         dao.limparTudo();
         tarefas = new ArrayList<>();
-        createSampleData();
+        updateRecyclerView();
     }
 
     @Override
@@ -139,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, TarefaActivity.class);
+            startActivity(intent);
             return true;
         } else if (id == R.id.action_sample) {
             createSampleData();
