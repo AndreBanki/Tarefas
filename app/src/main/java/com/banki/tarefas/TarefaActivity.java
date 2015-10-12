@@ -1,5 +1,6 @@
 package com.banki.tarefas;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -140,6 +141,7 @@ public class TarefaActivity extends AppCompatActivity {
         }
     };
 
+    @SuppressLint("ValidFragment")
     public class DatePickerFragment extends DialogFragment {
 
         DatePickerDialog.OnDateSetListener ondateSet;
@@ -154,6 +156,7 @@ public class TarefaActivity extends AppCompatActivity {
         }
 
         @Override
+        @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             Calendar cal = Calendar.getInstance();
             if (tarefa.getDueDate() != 0)
@@ -180,6 +183,7 @@ public class TarefaActivity extends AppCompatActivity {
         }
 
         @Override
+        @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             Calendar cal = Calendar.getInstance();
             if (tarefa.getDueDate() != 0)
@@ -188,7 +192,7 @@ public class TarefaActivity extends AppCompatActivity {
             cal.setTimeZone(TimeZone.getTimeZone("Brazil/East"));
             int hour = cal.get(Calendar.HOUR_OF_DAY);
             int minute = cal.get(Calendar.MINUTE);
-            boolean is24HourView = true;
+            final boolean is24HourView = true;
             return new TimePickerDialog(getActivity(), ontimeSet, hour, minute, is24HourView);
         }
     }
