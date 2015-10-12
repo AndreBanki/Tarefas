@@ -62,7 +62,6 @@ public class TarefaListController {
         Calendar cal = Calendar.getInstance();
         t1.setDueDate(cal.getTimeInMillis());
         t1.setReminder(true);
-        t1.setReminderMinutes(10);
         inserir(t1);
 
         Tarefa t2 = new Tarefa();

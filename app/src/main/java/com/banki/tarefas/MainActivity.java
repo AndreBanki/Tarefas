@@ -1,5 +1,7 @@
 package com.banki.tarefas;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -45,9 +47,31 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_TAREFA) {
             if (resultCode == RESULT_OK) {
                 Tarefa tarefa = (Tarefa)data.getSerializableExtra("tarefa");
-                tarefasList.inserir(tarefa);
+                tarefasList.inserir(tarefa); // atribui o ID
+                defineAlarme(tarefa);
             }
         }
+    }
+
+    private void defineAlarme(Tarefa tarefa) {
+        if (tarefa.getDueDate() != 0 && tarefa.hasReminder()) {
+            PendingIntent pendingIt = criaIntentQueSeraExecutadoPeloAlarme(tarefa);
+
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, tarefa.getDueDate(), pendingIt);
+        }
+    }
+
+    private PendingIntent criaIntentQueSeraExecutadoPeloAlarme(Tarefa tarefa) {
+        Intent intent = new Intent("ALERTA_TAREFA");
+        intent.putExtra("tarefa", tarefa);
+
+        final int requestCode = 0;
+        return PendingIntent.getBroadcast(
+                MainActivity.this,
+                requestCode,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private void initAddButton() {

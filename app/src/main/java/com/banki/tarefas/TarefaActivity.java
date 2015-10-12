@@ -1,8 +1,10 @@
 package com.banki.tarefas;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -47,13 +49,13 @@ public class TarefaActivity extends AppCompatActivity {
             public void onClick(View arg0) {
                 EditText editDescricao = (EditText) findViewById(R.id.editDescricao);
                 String descricao = editDescricao.getText().toString();
-                Intent intent = new Intent();
+                Intent returnIntent = new Intent();
                 if (descricao.isEmpty())
-                    setResult(RESULT_CANCELED, intent);
+                    setResult(RESULT_CANCELED, returnIntent);
                 else {
                     tarefa.setDescricao(descricao);
-                    intent.putExtra("tarefa", tarefa);
-                    setResult(RESULT_OK, intent);
+                    returnIntent.putExtra("tarefa", tarefa);
+                    setResult(RESULT_OK, returnIntent);
                 }
                 finish();
             }

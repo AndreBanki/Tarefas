@@ -21,6 +21,11 @@
             android:label="Tarefa"
             android:theme="@style/FloatingTheme">
         </activity>
+        <receiver android:name=".receiver.TarefaNotifier">
+            <intent-filter>
+                <action android:name="ALERTA_TAREFA" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
