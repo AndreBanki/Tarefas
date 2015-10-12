@@ -16,14 +16,20 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Definir data limite"
-        android:id="@+id/textData" />
+        android:id="@+id/textData"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:textColor="@android:color/black" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Definir alerta"
-        android:id="@+id/textHora" />
+        android:id="@+id/textHora"
+        android:layout_marginLeft="5dp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="5dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"

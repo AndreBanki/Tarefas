@@ -1,6 +1,7 @@
 package com.banki.tarefas.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,12 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefasVie
                     tarefaOnClickListener.onClickTarefa(holder.itemView, position);
                 }
             });
+        }
+
+        Calendar cal = Calendar.getInstance();
+        if (tarefa.getDueDate() != 0 && cal.getTimeInMillis() > tarefa.getDueDate()) {
+            holder.data.setTextColor(Color.RED);
+            holder.hora.setTextColor(Color.RED);
         }
     }
 

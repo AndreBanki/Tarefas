@@ -30,14 +30,16 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Example application"
-                android:textSize="15dp" />
+                android:textSize="15dp"
+                android:textColor="@android:color/black" />
 
             <TextView
                 android:id="@+id/secondLine"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Description"
-                android:textSize="10dp" />
+                android:textSize="10dp"
+                android:textColor="@android:color/black" />
 
         </LinearLayout>
 
@@ -52,7 +54,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="26/05"
-                android:textSize="12dp" />
+                android:textSize="12dp"
+                android:textColor="@android:color/black" />
 
             <TextView
                 android:id="@+id/hora"
@@ -60,7 +63,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="18:00"
-                android:textSize="12dp" />
+                android:textSize="12dp"
+                android:textColor="@android:color/black" />
 
         </LinearLayout>
 
