@@ -46,7 +46,7 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefasVie
         holder.firstLine.setText(tarefa.getDescricao());
 
         String msgAlarme = "";
-        if (tarefa.hasReminder())
+        if (tarefa.getReminderMinutes() != 0)
             msgAlarme = "Avisar " + tarefa.getReminderMinutes() + " minutos antes";
         holder.secondLine.setText(msgAlarme);
 

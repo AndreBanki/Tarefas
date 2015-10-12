@@ -2,6 +2,7 @@ package com.banki.tarefas;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,14 +13,17 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.banki.tarefas.model.Tarefa;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class TarefaActivity extends AppCompatActivity {
 
     private TextView textData;
+    private TextView textHora;
     protected Tarefa tarefa;
 
     @Override
@@ -30,6 +34,7 @@ public class TarefaActivity extends AppCompatActivity {
         tarefa = (Tarefa)getIntent().getSerializableExtra("tarefa");
 
         criaDatePicker();
+        criaTimePicker();
         criaBtnSalvar();
         criaBtnCancelar();
     }
@@ -79,6 +84,19 @@ public class TarefaActivity extends AppCompatActivity {
         });
     }
 
+    private void criaTimePicker() {
+        textHora = (TextView)findViewById(R.id.textHora);
+        preencheHora();
+        textHora.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                TimePickerFragment time = new TimePickerFragment(tarefa);
+                time.setCallBack(timeSetListener);
+                time.show(getSupportFragmentManager(), "Time Picker");
+            }
+        });
+    }
+
     private void preencheData() {
         if (tarefa.getDueDate() == 0)
             textData.setText("Definir data limite");
@@ -86,17 +104,45 @@ public class TarefaActivity extends AppCompatActivity {
             textData.setText("Data limite: " + tarefa.getDueDateAsString());
     }
 
+    private void preencheHora() {
+        if (tarefa.getDueDate() == 0)
+            textHora.setVisibility(View.INVISIBLE);
+        else {
+            textHora.setVisibility(View.VISIBLE);
+            if (!tarefa.hasReminder())
+                textHora.setText("Definir alerta");
+            else
+                textHora.setText("Alerta: " + tarefa.getReminderAsString());
+        }
+    }
+
     DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             tarefa.setDueDate(year, monthOfYear, dayOfMonth);
             preencheData();
+            preencheHora();
+        }
+    };
+
+    TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(tarefa.getDueDate());
+            cal.setTimeZone(TimeZone.getTimeZone("Brazil/East"));
+            cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            cal.set(Calendar.MINUTE,minute);
+
+            tarefa.setReminder(true);
+            tarefa.setDueDate(cal.getTimeInMillis());
+            preencheHora();
         }
     };
 
     public class DatePickerFragment extends DialogFragment {
-        DatePickerDialog.OnDateSetListener ondateSet;
 
+        DatePickerDialog.OnDateSetListener ondateSet;
         private Tarefa tarefa;
 
         public DatePickerFragment(Tarefa tarefa) {
@@ -120,5 +166,31 @@ public class TarefaActivity extends AppCompatActivity {
         }
     }
 
+    public class TimePickerFragment extends DialogFragment {
+
+        TimePickerDialog.OnTimeSetListener ontimeSet;
+        private Tarefa tarefa;
+
+        public TimePickerFragment(Tarefa tarefa) {
+            this.tarefa = tarefa;
+        }
+
+        public void setCallBack(TimePickerDialog.OnTimeSetListener ontimeSet) {
+            this.ontimeSet = ontimeSet;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            Calendar cal = Calendar.getInstance();
+            if (tarefa.getDueDate() != 0)
+                cal.setTimeInMillis(tarefa.getDueDate());
+
+            cal.setTimeZone(TimeZone.getTimeZone("Brazil/East"));
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            int minute = cal.get(Calendar.MINUTE);
+            boolean is24HourView = true;
+            return new TimePickerDialog(getActivity(), ontimeSet, hour, minute, is24HourView);
+        }
+    }
 
 }

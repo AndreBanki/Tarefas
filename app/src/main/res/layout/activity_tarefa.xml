@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="300dp"
-    android:layout_height="wrap_content">
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:padding="5dp">
 
     <EditText
         android:layout_width="match_parent"
@@ -15,6 +17,13 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Definir data limite"
         android:id="@+id/textData" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Definir alerta"
+        android:id="@+id/textHora" />
 
     <LinearLayout
         android:layout_width="wrap_content"

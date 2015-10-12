@@ -46,7 +46,7 @@ public class Tarefa implements Serializable {
 
     public String getReminderAsString() {
         String hora = "";
-        if (dueDate != 0) {
+        if (dueDate != 0 && reminder) {
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(dueDate);
 
