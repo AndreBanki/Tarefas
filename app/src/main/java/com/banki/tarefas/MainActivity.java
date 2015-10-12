@@ -15,18 +15,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.banki.tarefas.adapter.TarefaAdapter;
-import com.banki.tarefas.dao.TarefaDAO;
+import com.banki.tarefas.controller.TarefaListController;
 import com.banki.tarefas.model.Tarefa;
-
-import java.util.ArrayList;
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_TAREFA = 0;
-    private RecyclerView recyclerView;
-    private ArrayList<Tarefa> tarefas = new ArrayList<>();
-    TarefaDAO dao;
+    TarefaListController tarefasList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +37,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        dao = new TarefaDAO(this);
-        loadData();
+        tarefasList.loadData();
     }
 
     @Override
@@ -51,16 +45,9 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_TAREFA) {
             if (resultCode == RESULT_OK) {
                 Tarefa tarefa = (Tarefa)data.getSerializableExtra("tarefa");
-                dao.inserir(tarefa);
-                tarefas.add(tarefa);
-                updateRecyclerView();
+                tarefasList.inserir(tarefa);
             }
         }
-    }
-
-    private void loadData() {
-        tarefas = dao.listaTarefas();
-        updateRecyclerView();
     }
 
     private void initAddButton() {
@@ -78,25 +65,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRecyclerView() {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
-        updateRecyclerView();
-    }
-
-    private void updateRecyclerView() {
-        recyclerView.setAdapter(new TarefaAdapter(this, tarefas, onClickTarefa()));
+        tarefasList = new TarefaListController(this, recyclerView, onClickTarefa());
     }
 
     private TarefaAdapter.TarefaOnClickListener onClickTarefa(){
         return new TarefaAdapter.TarefaOnClickListener(){
             @Override
             public void onClickTarefa(View view, int index){
-                Tarefa tarefa = tarefas.get(index);
-                dao.apagar(tarefa);
-                tarefas.remove(tarefa);
-                updateRecyclerView();
+                Tarefa tarefa = tarefasList.get(index);
+                tarefasList.apagar(tarefa);
                 criaSnackBarOpcaoDesfazer(tarefa);
             }
         };
@@ -110,36 +91,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         tarefa.setId(0);
-                        dao.inserir(tarefa);
-                        tarefas.add(tarefa);
-                        updateRecyclerView();
+                        tarefasList.inserir(tarefa);
                     }
                 });
         snackbar.show();
-    }
-
-    private void createSampleData() {
-        Tarefa t1 = new Tarefa();
-        t1.setDescricao("Pagar cartão");
-        Calendar cal = Calendar.getInstance();
-        t1.setDueDate(cal.getTimeInMillis());
-        t1.setReminder(true);
-        t1.setReminderMinutes(10);
-        dao.inserir(t1);
-        tarefas.add(t1);
-
-        Tarefa t2 = new Tarefa();
-        t2.setDescricao("Renovar seguro do carro");
-        dao.inserir(t2);
-        tarefas.add(t2);
-
-        updateRecyclerView();
-    }
-
-    private void resetData() {
-        dao.limparTudo();
-        tarefas = new ArrayList<>();
-        updateRecyclerView();
     }
 
     @Override
@@ -152,16 +107,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(MainActivity.this, TarefaActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.action_sample) {
-            createSampleData();
-        }
-        else if (id == R.id.action_destroy) {
-            resetData();
-        }
+        if (id == R.id.action_sample)
+            tarefasList.createSampleData();
+        else if (id == R.id.action_destroy)
+            tarefasList.resetData();
 
         return super.onOptionsItemSelected(item);
     }
