@@ -13,6 +13,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,6 +28,8 @@ public class TarefaActivity extends AppCompatActivity {
 
     private TextView textData;
     private TextView textHora;
+    private CheckBox check;
+    private EditText editDescricao;
     protected Tarefa tarefa;
 
     @Override
@@ -36,10 +39,24 @@ public class TarefaActivity extends AppCompatActivity {
 
         tarefa = (Tarefa)getIntent().getSerializableExtra("tarefa");
 
+        criaEdit();
+        criaCheck();
         criaDatePicker();
         criaTimePicker();
         criaBtnSalvar();
         criaBtnCancelar();
+    }
+
+    private void criaEdit() {
+        editDescricao = (EditText) findViewById(R.id.editDescricao);
+        if (tarefa.getId() != 0)
+            editDescricao.setText(tarefa.getDescricao());
+    }
+
+    private void criaCheck() {
+        check = (CheckBox)findViewById(R.id.checkTarefa);
+        if (tarefa.getId() == 0)
+            check.setEnabled(false);
     }
 
     private void criaBtnSalvar() {
@@ -47,13 +64,14 @@ public class TarefaActivity extends AppCompatActivity {
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                EditText editDescricao = (EditText) findViewById(R.id.editDescricao);
                 String descricao = editDescricao.getText().toString();
                 Intent returnIntent = new Intent();
                 if (descricao.isEmpty())
                     setResult(RESULT_CANCELED, returnIntent);
                 else {
                     tarefa.setDescricao(descricao);
+                    tarefa.setCompleted(check.isChecked());
+
                     returnIntent.putExtra("tarefa", tarefa);
                     setResult(RESULT_OK, returnIntent);
                 }

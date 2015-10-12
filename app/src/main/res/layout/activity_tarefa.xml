@@ -5,11 +5,22 @@
     android:layout_height="wrap_content"
     android:padding="5dp">
 
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editDescricao"
-        android:hint="Descrição da tarefa" />
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkTarefa" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editDescricao"
+            android:hint="Descrição da tarefa" />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"

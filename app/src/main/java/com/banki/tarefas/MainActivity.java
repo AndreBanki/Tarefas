@@ -47,8 +47,14 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_TAREFA) {
             if (resultCode == RESULT_OK) {
                 Tarefa tarefa = (Tarefa)data.getSerializableExtra("tarefa");
-                tarefasList.inserir(tarefa); // atribui o ID
-                defineAlarme(tarefa);
+                if (tarefa.isCompleted()) {
+                    tarefasList.apagar(tarefa);
+                    criaSnackBarOpcaoDesfazer(tarefa);
+                }
+                else {
+                    tarefasList.salvar(tarefa); // atribui o ID se estiver criando
+                    defineAlarme(tarefa);
+                }
             }
         }
     }
@@ -101,8 +107,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClickTarefa(View view, int index){
                 Tarefa tarefa = tarefasList.get(index);
-                tarefasList.apagar(tarefa);
-                criaSnackBarOpcaoDesfazer(tarefa);
+                Intent intent = new Intent(MainActivity.this, TarefaActivity.class);
+                intent.putExtra("tarefa", tarefa);
+                startActivityForResult(intent, REQUEST_TAREFA);
             }
         };
     }
@@ -115,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         tarefa.setId(0);
-                        tarefasList.inserir(tarefa);
+                        tarefasList.salvar(tarefa);
                     }
                 });
         snackbar.show();

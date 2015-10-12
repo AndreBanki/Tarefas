@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import com.banki.tarefas.model.Tarefa;
 
@@ -45,18 +46,31 @@ public class TarefaDAO {
             tarefas.add(tarefa);
             c.moveToNext();
         }
-
         return tarefas;
     }
 
     public int inserir(Tarefa tarefa) {
+        ContentValues valores = fieldValuesFrom(tarefa);
+        return (int)db.insert(TarefaSQL.TABELA, null, valores);
+    }
+
+    public void atualizar(Tarefa tarefa) {
+        ContentValues valores = fieldValuesFrom(tarefa);
+        String where = TarefaSQL._ID + "=?";
+        String[] whereArgs = new String[] { String.valueOf(tarefa.getId()) };
+
+        db.update(TarefaSQL.TABELA, valores, where, whereArgs);
+    }
+
+    @NonNull
+    private ContentValues fieldValuesFrom(Tarefa tarefa) {
         ContentValues valores = new ContentValues();
         valores.put(TarefaSQL.COMPLETED, tarefa.isCompleted());
         valores.put(TarefaSQL.DESCRICAO, tarefa.getDescricao());
         valores.put(TarefaSQL.DUEDATE, tarefa.getDueDate());
         valores.put(TarefaSQL.REMINDER, tarefa.hasReminder());
         valores.put(TarefaSQL.REMINDERMINUTES, tarefa.getReminderMinutes());
-        return (int)db.insert(TarefaSQL.TABELA, null, valores);
+        return valores;
     }
 
     public void apagar(Tarefa tarefa){

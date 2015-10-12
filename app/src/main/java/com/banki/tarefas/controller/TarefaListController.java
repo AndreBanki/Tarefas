@@ -37,10 +37,22 @@ public class TarefaListController {
         return tarefas.get(index);
     }
 
-    public void inserir(Tarefa tarefa) {
+    public void salvar(Tarefa tarefa) {
+        if (tarefa.getId() == 0)
+            inserir(tarefa);
+        else
+            atualizar(tarefa);
+    }
+
+    private void inserir(Tarefa tarefa) {
         int id = dao.inserir(tarefa);
         tarefa.setId(id);
         tarefas.add(tarefa);
+        updateRecyclerView();
+    }
+
+    private void atualizar(Tarefa tarefa) {
+        dao.atualizar(tarefa);
         updateRecyclerView();
     }
 
