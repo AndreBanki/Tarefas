@@ -31,6 +31,7 @@ public class TarefaActivity extends AppCompatActivity {
 
         criaDatePicker();
         criaBtnSalvar();
+        criaBtnCancelar();
     }
 
     private void criaBtnSalvar() {
@@ -38,13 +39,28 @@ public class TarefaActivity extends AppCompatActivity {
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                EditText editDescricao = (EditText)findViewById(R.id.editDescricao);
+                EditText editDescricao = (EditText) findViewById(R.id.editDescricao);
                 String descricao = editDescricao.getText().toString();
-                tarefa.setDescricao(descricao);
-
                 Intent intent = new Intent();
-                intent.putExtra("tarefa", tarefa);
-                setResult(RESULT_OK, intent);
+                if (descricao.isEmpty())
+                    setResult(RESULT_CANCELED, intent);
+                else {
+                    tarefa.setDescricao(descricao);
+                    intent.putExtra("tarefa", tarefa);
+                    setResult(RESULT_OK, intent);
+                }
+                finish();
+            }
+        });
+    }
+
+    private void criaBtnCancelar() {
+        Button btnCancel = (Button)findViewById(R.id.btnCancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                Intent intent = new Intent();
+                setResult(RESULT_CANCELED, intent);
                 finish();
             }
         });
