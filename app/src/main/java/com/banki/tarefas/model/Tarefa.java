@@ -1,15 +1,15 @@
 package com.banki.tarefas.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class Tarefa implements Serializable {
 
-    public static String _ID = "_id";
-    public static String COMPLETED = "completed";
-    public static String DESCRICAO = "descricao";
-    public static String DUEDATE = "duedate";
-    public static String REMINDER = "reminder";
-    public static String REMINDERMINUTES = "reminderminutes";
+    private Locale PT_BR = new Locale("pt","BR");
+    private TimeZone BRAZIL = TimeZone.getTimeZone("Brazil/East");
 
     private int id;
     private boolean completed;
@@ -25,6 +25,36 @@ public class Tarefa implements Serializable {
         this.dueDate = 0;
         this.reminder = false;
         reminderMinutes = 0;
+    }
+
+    public String getDueDateAsString() {
+        String data = "";
+        if (dueDate != 0) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(dueDate);
+
+            SimpleDateFormat dateFormat;
+            Calendar hoje = Calendar.getInstance();
+            if (cal.get(Calendar.YEAR) == hoje.get(Calendar.YEAR))
+                dateFormat = new SimpleDateFormat("dd/MMM", PT_BR);
+            else
+                dateFormat = new SimpleDateFormat("dd/MMM/yy", PT_BR);
+            data = dateFormat.format(cal.getTime());
+        }
+        return data;
+    }
+
+    public String getReminderAsString() {
+        String hora = "";
+        if (dueDate != 0) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(dueDate);
+
+            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm", PT_BR);
+            timeFormat.setTimeZone(BRAZIL);
+            hora = timeFormat.format(cal.getTime());
+        }
+        return hora;
     }
 
     public int getId() {
@@ -61,6 +91,14 @@ public class Tarefa implements Serializable {
 
     public void setDueDate(long dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public void setDueDate(int year, int monthOfYear, int dayOfMonth) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, monthOfYear);
+        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        dueDate = cal.getTimeInMillis();
     }
 
     public boolean hasReminder() {

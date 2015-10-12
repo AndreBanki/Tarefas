@@ -11,25 +11,25 @@ import java.util.ArrayList;
 
 public class TarefaDAO {
 
-    private SQLiteHelper dbHelper;
+    private TarefaSQL dbHelper;
     private SQLiteDatabase db;
 
     public TarefaDAO(Context ctx) {
-        dbHelper = new SQLiteHelper(ctx);
+        dbHelper = new TarefaSQL(ctx);
         db = dbHelper.getWritableDatabase();
     }
 
     public ArrayList<Tarefa> listaTarefas() {
         ArrayList<Tarefa> tarefas = new ArrayList<>();
         String[] colunas = new String[]{
-                Tarefa._ID,
-                Tarefa.DESCRICAO,
-                Tarefa.COMPLETED,
-                Tarefa.DUEDATE,
-                Tarefa.REMINDER,
-                Tarefa.REMINDERMINUTES
+                TarefaSQL._ID,
+                TarefaSQL.DESCRICAO,
+                TarefaSQL.COMPLETED,
+                TarefaSQL.DUEDATE,
+                TarefaSQL.REMINDER,
+                TarefaSQL.REMINDERMINUTES
         };
-        Cursor c = db.query(SQLiteHelper.TABELA, colunas, null, null, null, null, null);
+        Cursor c = db.query(TarefaSQL.TABELA, colunas, null, null, null, null, null);
 
         c.moveToFirst();
         int nTarefas = c.getCount();
@@ -51,19 +51,19 @@ public class TarefaDAO {
 
     public int inserir(Tarefa tarefa) {
         ContentValues valores = new ContentValues();
-        valores.put(Tarefa.COMPLETED, tarefa.isCompleted());
-        valores.put(Tarefa.DESCRICAO, tarefa.getDescricao());
-        valores.put(Tarefa.DUEDATE, tarefa.getDueDate());
-        valores.put(Tarefa.REMINDER, tarefa.hasReminder());
-        valores.put(Tarefa.REMINDERMINUTES, tarefa.getReminderMinutes());
-        return (int)db.insert(SQLiteHelper.TABELA, null, valores);
+        valores.put(TarefaSQL.COMPLETED, tarefa.isCompleted());
+        valores.put(TarefaSQL.DESCRICAO, tarefa.getDescricao());
+        valores.put(TarefaSQL.DUEDATE, tarefa.getDueDate());
+        valores.put(TarefaSQL.REMINDER, tarefa.hasReminder());
+        valores.put(TarefaSQL.REMINDERMINUTES, tarefa.getReminderMinutes());
+        return (int)db.insert(TarefaSQL.TABELA, null, valores);
     }
 
     public void apagar(Tarefa tarefa){
         if (tarefa.getId() != 0) {
-            String whereClause = Tarefa._ID + " = ?";
+            String whereClause = TarefaSQL._ID + " = ?";
             String[] whereValues = new String[]{String.valueOf(tarefa.getId())};
-            db.delete(SQLiteHelper.TABELA, whereClause, whereValues);
+            db.delete(TarefaSQL.TABELA, whereClause, whereValues);
         }
     }
 

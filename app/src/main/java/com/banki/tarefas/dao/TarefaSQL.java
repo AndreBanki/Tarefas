@@ -6,26 +6,33 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.banki.tarefas.model.Tarefa;
 
-public class SQLiteHelper extends SQLiteOpenHelper {
+public class TarefaSQL extends SQLiteOpenHelper {
 
     public static String TABELA = "tarefa";
+
+    public static String _ID = "_id";
+    public static String COMPLETED = "completed";
+    public static String DESCRICAO = "descricao";
+    public static String DUEDATE = "duedate";
+    public static String REMINDER = "reminder";
+    public static String REMINDERMINUTES = "reminderminutes";
 
     private static String nomeBanco = "tarefas";
     private static int versaoBanco = 2;
 
-    public SQLiteHelper(Context context) {
+    public TarefaSQL(Context context) {
         super(context, nomeBanco, null, versaoBanco);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         String scriptSQLCreate = "create table " + TABELA + "(" +
-                Tarefa._ID + " integer primary key autoincrement," +
-                Tarefa.DESCRICAO + " text not null," +
-                Tarefa.COMPLETED + " completed integer," +
-                Tarefa.DUEDATE + " integer," +
-                Tarefa.REMINDER+ " integer," +
-                Tarefa.REMINDERMINUTES + " integer" +
+                _ID + " integer primary key autoincrement," +
+                DESCRICAO + " text not null," +
+                COMPLETED + " completed integer," +
+                DUEDATE + " integer," +
+                REMINDER+ " integer," +
+                REMINDERMINUTES + " integer" +
                 ");";
         db.execSQL(scriptSQLCreate);
     }

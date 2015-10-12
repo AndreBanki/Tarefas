@@ -50,26 +50,8 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefasVie
             msgAlarme = "Avisar " + tarefa.getReminderMinutes() + " minutos antes";
         holder.secondLine.setText(msgAlarme);
 
-        String data = "";
-        String hora = "";
-        if (tarefa.getDueDate() != 0) {
-            Locale PT_BR = new Locale("pt","BR");
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(tarefa.getDueDate());
-
-            SimpleDateFormat dateFormat;
-            Calendar hoje = Calendar.getInstance();
-            if (cal.get(Calendar.YEAR) == hoje.get(Calendar.YEAR))
-                dateFormat = new SimpleDateFormat("dd/MMM", PT_BR);
-            else
-                dateFormat = new SimpleDateFormat("dd/MMM/yy", PT_BR);
-            data = dateFormat.format(cal.getTime());
-
-            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm", PT_BR);
-            hora = timeFormat.format(cal.getTime());
-        }
-        holder.data.setText(data);
-        holder.hora.setText(hora);
+        holder.data.setText(tarefa.getDueDateAsString());
+        holder.hora.setText(tarefa.getReminderAsString());
 
         if (tarefaOnClickListener != null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
