@@ -4,6 +4,10 @@
     <style name="AppTheme" parent="MyMaterialTheme.Base">
     </style>
 
+    <style name="FloatingTheme" parent="MyMaterialTheme.Base">
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
     <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>

@@ -18,7 +18,8 @@
         </activity>
         <activity
             android:name=".TarefaActivity"
-            android:label="Tarefa">
+            android:label="Tarefa"
+            android:theme="@style/FloatingTheme">
         </activity>
     </application>
 
