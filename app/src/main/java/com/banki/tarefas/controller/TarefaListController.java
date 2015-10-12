@@ -62,6 +62,17 @@ public class TarefaListController {
         updateRecyclerView();
     }
 
+    public Tarefa find(Tarefa tarefa) {
+        Tarefa tarefaEncontrada = null;
+        int nTarefas = tarefas.size();
+        for (int i = 0; i<nTarefas && tarefaEncontrada==null; i++) {
+            Tarefa current = tarefas.get(i);
+            if (current.getId() == tarefa.getId())
+                tarefaEncontrada = current;
+        }
+        return tarefaEncontrada;
+    }
+
     public void resetData() {
         dao.limparTudo();
         tarefas = new ArrayList<>();

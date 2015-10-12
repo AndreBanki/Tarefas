@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.banki.tarefas.adapter.TarefaAdapter;
 import com.banki.tarefas.controller.TarefaListController;
@@ -41,9 +42,15 @@ public class MainActivity extends AppCompatActivity {
     private void trataAberturaViaNotificacao() {
         Tarefa tarefaNotificada = (Tarefa)getIntent().getSerializableExtra("tarefa");
         if (tarefaNotificada != null) {
-            Intent intent = new Intent(MainActivity.this, TarefaActivity.class);
-            intent.putExtra("tarefa", tarefaNotificada);
-            startActivityForResult(intent, REQUEST_TAREFA);
+            Tarefa tarefaEditar = tarefasList.find(tarefaNotificada);
+            if (tarefaEditar == null)
+                Toast.makeText(this, "Tarefa não encontrada. Provavelmente, já foi concluída.",
+                               Toast.LENGTH_LONG).show();
+            else {
+                Intent intent = new Intent(MainActivity.this, TarefaActivity.class);
+                intent.putExtra("tarefa", tarefaEditar);
+                startActivityForResult(intent, REQUEST_TAREFA);
+            }
         }
     }
 
@@ -111,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
         tarefasList = new TarefaListController(this, recyclerView, onClickTarefa());
+        tarefasList.loadData();
     }
 
     private TarefaAdapter.TarefaOnClickListener onClickTarefa(){
