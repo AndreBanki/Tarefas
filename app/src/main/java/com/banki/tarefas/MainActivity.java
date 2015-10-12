@@ -34,6 +34,17 @@ public class MainActivity extends AppCompatActivity {
 
         initAddButton();
         initRecyclerView();
+
+        trataAberturaViaNotificacao();
+    }
+
+    private void trataAberturaViaNotificacao() {
+        Tarefa tarefaNotificada = (Tarefa)getIntent().getSerializableExtra("tarefa");
+        if (tarefaNotificada != null) {
+            Intent intent = new Intent(MainActivity.this, TarefaActivity.class);
+            intent.putExtra("tarefa", tarefaNotificada);
+            startActivityForResult(intent, REQUEST_TAREFA);
+        }
     }
 
     @Override
