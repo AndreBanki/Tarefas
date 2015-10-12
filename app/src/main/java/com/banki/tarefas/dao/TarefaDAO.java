@@ -38,7 +38,7 @@ public class TarefaDAO {
             tarefa.setId(c.getInt(0));
             tarefa.setDescricao(c.getString(1));
             tarefa.setCompleted(c.getInt(2));
-            tarefa.setDueDate(c.getInt(3));
+            tarefa.setDueDate(c.getLong(3));
             tarefa.setReminder(c.getInt(4));
             tarefa.setReminderMinutes(c.getInt(5));
 
@@ -49,14 +49,14 @@ public class TarefaDAO {
         return tarefas;
     }
 
-    public void inserir(Tarefa tarefa) {
+    public int inserir(Tarefa tarefa) {
         ContentValues valores = new ContentValues();
         valores.put(Tarefa.COMPLETED, tarefa.isCompleted());
         valores.put(Tarefa.DESCRICAO, tarefa.getDescricao());
         valores.put(Tarefa.DUEDATE, tarefa.getDueDate());
         valores.put(Tarefa.REMINDER, tarefa.hasReminder());
         valores.put(Tarefa.REMINDERMINUTES, tarefa.getReminderMinutes());
-        db.insert(SQLiteHelper.TABELA, null, valores);
+        return (int)db.insert(SQLiteHelper.TABELA, null, valores);
     }
 
     public void apagar(Tarefa tarefa){
