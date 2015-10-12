@@ -53,11 +53,19 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefasVie
         String data = "";
         String hora = "";
         if (tarefa.getDueDate() != 0) {
+            Locale PT_BR = new Locale("pt","BR");
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(tarefa.getDueDate());
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MMM", Locale.getDefault());
+
+            SimpleDateFormat dateFormat;
+            Calendar hoje = Calendar.getInstance();
+            if (cal.get(Calendar.YEAR) == hoje.get(Calendar.YEAR))
+                dateFormat = new SimpleDateFormat("dd/MMM", PT_BR);
+            else
+                dateFormat = new SimpleDateFormat("dd/MMM/yy", PT_BR);
             data = dateFormat.format(cal.getTime());
-            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm", Locale.getDefault());
+
+            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm", PT_BR);
             hora = timeFormat.format(cal.getTime());
         }
         holder.data.setText(data);

@@ -18,8 +18,7 @@
         </activity>
         <activity
             android:name=".TarefaActivity"
-            android:label="Tarefa"
-            android:theme="@android:style/Theme.Holo.Light.Dialog">
+            android:label="Tarefa">
         </activity>
     </application>
 
