@@ -73,6 +73,10 @@ public class TarefaListController {
         return tarefaEncontrada;
     }
 
+    public void fechar() {
+        dao.fechar();
+    }
+
     public void resetData() {
         dao.limparTudo();
         tarefas = new ArrayList<>();

@@ -83,6 +83,7 @@ public class TarefaDAO {
 
     public void fechar() {
         db.close();
+        dbHelper.close();
     }
 
     public void limparTudo() {
