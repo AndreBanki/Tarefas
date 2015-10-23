@@ -22,7 +22,6 @@ import android.widget.TimePicker;
 import com.banki.tarefas.model.Tarefa;
 
 import java.util.Calendar;
-import java.util.TimeZone;
 
 public class TarefaActivity extends AppCompatActivity {
 
@@ -151,7 +150,6 @@ public class TarefaActivity extends AppCompatActivity {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(tarefa.getDueDate());
-            cal.setTimeZone(TimeZone.getTimeZone("Brazil/East"));
             cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
             cal.set(Calendar.MINUTE,minute);
 
@@ -209,7 +207,6 @@ public class TarefaActivity extends AppCompatActivity {
             if (tarefa.getDueDate() != 0)
                 cal.setTimeInMillis(tarefa.getDueDate());
 
-            cal.setTimeZone(TimeZone.getTimeZone("Brazil/East"));
             int hour = cal.get(Calendar.HOUR_OF_DAY);
             int minute = cal.get(Calendar.MINUTE);
             final boolean is24HourView = true;

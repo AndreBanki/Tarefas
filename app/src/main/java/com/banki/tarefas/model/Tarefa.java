@@ -4,12 +4,10 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.TimeZone;
 
 public class Tarefa implements Serializable {
 
     private Locale PT_BR = new Locale("pt","BR");
-    private TimeZone BRAZIL = TimeZone.getTimeZone("Brazil/East");
 
     private int id;
     private boolean completed;
@@ -51,7 +49,6 @@ public class Tarefa implements Serializable {
             cal.setTimeInMillis(dueDate);
 
             SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm", PT_BR);
-            timeFormat.setTimeZone(BRAZIL);
             hora = timeFormat.format(cal.getTime());
         }
         return hora;
