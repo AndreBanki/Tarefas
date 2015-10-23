@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -98,7 +99,6 @@ public class TarefaActivity extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
                 DatePickerFragment date = new DatePickerFragment(tarefa);
-                date.setCallBack(dateSetListener);
                 date.show(getSupportFragmentManager(), "Date Picker");
             }
         });
@@ -136,15 +136,6 @@ public class TarefaActivity extends AppCompatActivity {
         }
     }
 
-    DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            tarefa.setDueDate(year, monthOfYear, dayOfMonth);
-            preencheData();
-            preencheHora();
-        }
-    };
-
     TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -162,15 +153,10 @@ public class TarefaActivity extends AppCompatActivity {
     @SuppressLint("ValidFragment")
     public class DatePickerFragment extends DialogFragment {
 
-        DatePickerDialog.OnDateSetListener ondateSet;
         private Tarefa tarefa;
 
         public DatePickerFragment(Tarefa tarefa) {
             this.tarefa = tarefa;
-        }
-
-        public void setCallBack(DatePickerDialog.OnDateSetListener ondate) {
-            ondateSet = ondate;
         }
 
         @Override
@@ -183,7 +169,52 @@ public class TarefaActivity extends AppCompatActivity {
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
             int day = cal.get(Calendar.DAY_OF_MONTH);
-            return new DatePickerDialog(getActivity(), ondateSet, year, month, day);
+            return new DatePickerWithNeutral(getActivity(), year, month, day);
+        }
+    }
+
+    public class DatePickerWithNeutral extends DatePickerDialog {
+
+        public DatePickerWithNeutral(Context context, int year, int monthOfYear, int dayOfMonth) {
+            super(context, 0, null, year, monthOfYear, dayOfMonth);
+
+            setButton(BUTTON_POSITIVE, ("Definir"), this);
+            setButton(BUTTON_NEUTRAL, ("Limpar"), this);
+            setButton(BUTTON_NEGATIVE, ("Cancelar"), this);
+        }
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            getButton(BUTTON_NEUTRAL).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            tarefa.setDueDate(0);
+                            dismiss();
+                            preencheData();
+                            preencheHora();
+                        }
+                    });
+            getButton(BUTTON_POSITIVE).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            tarefa.setDueDate(getDatePicker().getYear(),
+                                              getDatePicker().getMonth(),
+                                              getDatePicker().getDayOfMonth());
+                            dismiss();
+                            preencheData();
+                            preencheHora();
+                        }
+                    });
+            getButton(BUTTON_NEGATIVE).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dismiss();
+                        }
+                    });
         }
     }
 
