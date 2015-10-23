@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 Tarefa tarefa = (Tarefa)data.getSerializableExtra("tarefa");
                 if (tarefa.isCompleted()) {
                     tarefasList.apagar(tarefa);
+                    cancelaAlarme(tarefa);
                     criaSnackBarOpcaoDesfazer(tarefa);
                 }
                 else {
@@ -81,6 +82,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void cancelaAlarme(Tarefa tarefa) {
+        // mesmo Intent que seria executado (se não tiver nenhum o Cancel só não faz nada)
+        PendingIntent pendingIt = criaIntentQueSeraExecutadoPeloAlarme(tarefa);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.cancel(pendingIt);
     }
 
     private void defineAlarme(Tarefa tarefa) {
