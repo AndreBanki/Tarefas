@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_TAREFA = 0;
     TarefaListController tarefasList;
+    Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (snackbar != null)
+                    snackbar.dismiss();
                 Tarefa t = new Tarefa();
                 Intent intent = new Intent(MainActivity.this, TarefaActivity.class);
                 intent.putExtra("tarefa", t);
@@ -140,6 +143,8 @@ public class MainActivity extends AppCompatActivity {
         return new TarefaAdapter.TarefaOnClickListener(){
             @Override
             public void onClickTarefa(View view, int index){
+                if (snackbar != null)
+                    snackbar.dismiss();
                 Tarefa tarefa = tarefasList.get(index);
                 Intent intent = new Intent(MainActivity.this, TarefaActivity.class);
                 intent.putExtra("tarefa", tarefa);
@@ -150,13 +155,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void criaSnackBarOpcaoDesfazer(final Tarefa tarefa) {
         final CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainLayout);
-        Snackbar snackbar = Snackbar
+        snackbar = Snackbar
                 .make(coordinatorLayout, "Tarefa concluída!", Snackbar.LENGTH_INDEFINITE)
                 .setAction("DESFAZER", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         tarefa.setId(0);
                         tarefasList.salvar(tarefa);
+                        defineAlarme(tarefa);
                     }
                 });
         snackbar.show();
