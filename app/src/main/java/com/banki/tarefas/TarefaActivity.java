@@ -1,10 +1,8 @@
 package com.banki.tarefas;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -111,7 +108,6 @@ public class TarefaActivity extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
                 TimePickerFragment time = new TimePickerFragment(tarefa);
-                time.setCallBack(timeSetListener);
                 time.show(getSupportFragmentManager(), "Time Picker");
             }
         });
@@ -135,20 +131,6 @@ public class TarefaActivity extends AppCompatActivity {
                 textHora.setText("Alerta: " + tarefa.getReminderAsString());
         }
     }
-
-    TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
-        @Override
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(tarefa.getDueDate());
-            cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            cal.set(Calendar.MINUTE,minute);
-
-            tarefa.setReminder(true);
-            tarefa.setDueDate(cal.getTimeInMillis());
-            preencheHora();
-        }
-    };
 
     @SuppressLint("ValidFragment")
     public class DatePickerFragment extends DialogFragment {
@@ -220,15 +202,10 @@ public class TarefaActivity extends AppCompatActivity {
 
     public class TimePickerFragment extends DialogFragment {
 
-        TimePickerDialog.OnTimeSetListener ontimeSet;
         private Tarefa tarefa;
 
         public TimePickerFragment(Tarefa tarefa) {
             this.tarefa = tarefa;
-        }
-
-        public void setCallBack(TimePickerDialog.OnTimeSetListener ontimeSet) {
-            this.ontimeSet = ontimeSet;
         }
 
         @Override
@@ -241,7 +218,67 @@ public class TarefaActivity extends AppCompatActivity {
             int hour = cal.get(Calendar.HOUR_OF_DAY);
             int minute = cal.get(Calendar.MINUTE);
             final boolean is24HourView = true;
-            return new TimePickerDialog(getActivity(), ontimeSet, hour, minute, is24HourView);
+            return new TimePickerWithNeutral(getActivity(), hour, minute, is24HourView);
+        }
+    }
+
+    public class TimePickerWithNeutral extends TimePickerDialog {
+
+        int hourOfDay, minute;
+
+        public TimePickerWithNeutral(Context context, int hour, int minute, boolean is24HourView) {
+            super(context, 0, null, hour, minute, is24HourView);
+
+            this.hourOfDay = hour;
+            this.minute = minute;
+
+            setButton(BUTTON_POSITIVE, ("Definir"), this);
+            setButton(BUTTON_NEUTRAL, ("Limpar"), this);
+            setButton(BUTTON_NEGATIVE, ("Cancelar"), this);
+        }
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            getButton(BUTTON_NEUTRAL).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            tarefa.setReminder(false);
+                            dismiss();
+                            preencheHora();
+                        }
+                    });
+            getButton(BUTTON_POSITIVE).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Calendar cal = Calendar.getInstance();
+                            cal.setTimeInMillis(tarefa.getDueDate());
+                            cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                            cal.set(Calendar.MINUTE, minute);
+
+                            tarefa.setReminder(true);
+                            tarefa.setDueDate(cal.getTimeInMillis());
+
+                            dismiss();
+                            preencheHora();
+                        }
+                    });
+            getButton(BUTTON_NEGATIVE).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dismiss();
+                        }
+                    });
+        }
+
+        @Override
+        public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+            super.onTimeChanged(view, hourOfDay, minute);
+            this.hourOfDay = hourOfDay;
+            this.minute = minute;
         }
     }
 
