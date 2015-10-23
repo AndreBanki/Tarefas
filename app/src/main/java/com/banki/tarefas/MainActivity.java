@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void defineAlarme(Tarefa tarefa) {
-        if (tarefa.getDueDate() != 0 && tarefa.hasReminder()) {
+        if (tarefa.hasFutureReminder()) {
             PendingIntent pendingIt = criaIntentQueSeraExecutadoPeloAlarme(tarefa);
 
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);

@@ -54,6 +54,14 @@ public class Tarefa implements Serializable {
         return hora;
     }
 
+    public boolean hasFutureReminder() {
+        if (dueDate != 0 && reminder) {
+            Calendar cal = Calendar.getInstance();
+            return dueDate > cal.getTimeInMillis();
+        } else
+            return false;
+    }
+
     public int getId() {
         return id;
     }
