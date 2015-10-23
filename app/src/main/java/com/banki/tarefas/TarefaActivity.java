@@ -173,6 +173,7 @@ public class TarefaActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             tarefa.setDueDate(0);
+                            tarefa.setReminder(false);
                             dismiss();
                             preencheData();
                             preencheHora();
