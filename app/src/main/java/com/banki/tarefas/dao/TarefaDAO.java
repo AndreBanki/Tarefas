@@ -25,10 +25,8 @@ public class TarefaDAO {
         String[] colunas = new String[]{
                 TarefaSQL._ID,
                 TarefaSQL.DESCRICAO,
-                TarefaSQL.COMPLETED,
                 TarefaSQL.DUEDATE,
-                TarefaSQL.REMINDER,
-                TarefaSQL.REMINDERMINUTES
+                TarefaSQL.REMINDER
         };
         Cursor c = db.query(TarefaSQL.TABELA, colunas, null, null, null, null, null);
 
@@ -38,10 +36,8 @@ public class TarefaDAO {
             Tarefa tarefa = new Tarefa();
             tarefa.setId(c.getInt(0));
             tarefa.setDescricao(c.getString(1));
-            tarefa.setCompleted(c.getInt(2));
-            tarefa.setDueDate(c.getLong(3));
-            tarefa.setReminder(c.getInt(4));
-            tarefa.setReminderMinutes(c.getInt(5));
+            tarefa.setDueDate(c.getLong(2));
+            tarefa.setReminder(c.getInt(3));
 
             tarefas.add(tarefa);
             c.moveToNext();
@@ -65,11 +61,9 @@ public class TarefaDAO {
     @NonNull
     private ContentValues fieldValuesFrom(Tarefa tarefa) {
         ContentValues valores = new ContentValues();
-        valores.put(TarefaSQL.COMPLETED, tarefa.isCompleted());
         valores.put(TarefaSQL.DESCRICAO, tarefa.getDescricao());
         valores.put(TarefaSQL.DUEDATE, tarefa.getDueDate());
         valores.put(TarefaSQL.REMINDER, tarefa.hasReminder());
-        valores.put(TarefaSQL.REMINDERMINUTES, tarefa.getReminderMinutes());
         return valores;
     }
 

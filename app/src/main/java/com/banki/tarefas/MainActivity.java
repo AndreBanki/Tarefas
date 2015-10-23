@@ -178,9 +178,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_sample)
-            tarefasList.createSampleData();
-        else if (id == R.id.action_destroy)
+        if (id == R.id.action_destroy)
             tarefasList.resetData();
 
         return super.onOptionsItemSelected(item);

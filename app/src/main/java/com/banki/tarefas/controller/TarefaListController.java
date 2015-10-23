@@ -82,17 +82,4 @@ public class TarefaListController {
         tarefas = new ArrayList<>();
         updateRecyclerView();
     }
-
-    public void createSampleData() {
-        Tarefa t1 = new Tarefa();
-        t1.setDescricao("Pagar cartão");
-        Calendar cal = Calendar.getInstance();
-        t1.setDueDate(cal.getTimeInMillis());
-        t1.setReminder(true);
-        inserir(t1);
-
-        Tarefa t2 = new Tarefa();
-        t2.setDescricao("Renovar seguro do carro");
-        inserir(t2);
-    }
 }

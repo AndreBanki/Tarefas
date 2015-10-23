@@ -11,14 +11,12 @@ public class TarefaSQL extends SQLiteOpenHelper {
     public static String TABELA = "tarefa";
 
     public static String _ID = "_id";
-    public static String COMPLETED = "completed";
     public static String DESCRICAO = "descricao";
     public static String DUEDATE = "duedate";
     public static String REMINDER = "reminder";
-    public static String REMINDERMINUTES = "reminderminutes";
 
     private static String nomeBanco = "tarefas";
-    private static int versaoBanco = 2;
+    private static int versaoBanco = 3;
 
     public TarefaSQL(Context context) {
         super(context, nomeBanco, null, versaoBanco);
@@ -29,10 +27,8 @@ public class TarefaSQL extends SQLiteOpenHelper {
         String scriptSQLCreate = "create table " + TABELA + "(" +
                 _ID + " integer primary key autoincrement," +
                 DESCRICAO + " text not null," +
-                COMPLETED + " completed integer," +
                 DUEDATE + " integer," +
-                REMINDER+ " integer," +
-                REMINDERMINUTES + " integer" +
+                REMINDER + " integer" +
                 ");";
         db.execSQL(scriptSQLCreate);
     }

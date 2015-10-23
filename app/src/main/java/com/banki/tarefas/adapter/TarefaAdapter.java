@@ -46,11 +46,6 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefasVie
         Tarefa tarefa = tarefas.get(position);
         holder.firstLine.setText(tarefa.getDescricao());
 
-        String msgAlarme = "";
-        if (tarefa.getReminderMinutes() != 0)
-            msgAlarme = "Avisar " + tarefa.getReminderMinutes() + " minutos antes";
-        holder.secondLine.setText(msgAlarme);
-
         holder.data.setText(tarefa.getDueDateAsString());
         holder.hora.setText(tarefa.getReminderAsString());
 
@@ -76,7 +71,6 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefasVie
 
     public static class TarefasViewHolder extends RecyclerView.ViewHolder {
         public TextView firstLine;
-        public TextView secondLine;
         public TextView data;
         public TextView hora;
         CardView cardView;
@@ -86,7 +80,6 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefasVie
             data = (TextView) view.findViewById(R.id.data);
             hora = (TextView) view.findViewById(R.id.hora);
             firstLine = (TextView) view.findViewById(R.id.firstLine);
-            secondLine = (TextView) view.findViewById(R.id.secondLine);
             cardView = (CardView) view.findViewById(R.id.card_view);
         }
     }

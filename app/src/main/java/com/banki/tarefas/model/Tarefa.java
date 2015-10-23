@@ -14,7 +14,6 @@ public class Tarefa implements Serializable {
     private String descricao;
     private long dueDate;
     private boolean reminder;
-    private int reminderMinutes;
 
     public Tarefa() {
         this.id = 0;
@@ -22,7 +21,6 @@ public class Tarefa implements Serializable {
         this.descricao = "";
         this.dueDate = 0;
         this.reminder = false;
-        reminderMinutes = 0;
     }
 
     public String getDueDateAsString() {
@@ -116,13 +114,5 @@ public class Tarefa implements Serializable {
 
     public void setReminder(int reminder) {
         this.reminder = reminder != 0;
-    }
-
-    public int getReminderMinutes() {
-        return reminderMinutes;
-    }
-
-    public void setReminderMinutes(int reminderMinutes) {
-        this.reminderMinutes = reminderMinutes;
     }
 }

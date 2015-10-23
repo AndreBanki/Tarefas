@@ -32,15 +32,6 @@
                 android:text="Example application"
                 android:textSize="15dp"
                 android:textColor="@android:color/black" />
-
-            <TextView
-                android:id="@+id/secondLine"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Description"
-                android:textSize="10dp"
-                android:textColor="@android:color/black" />
-
         </LinearLayout>
 
         <LinearLayout
