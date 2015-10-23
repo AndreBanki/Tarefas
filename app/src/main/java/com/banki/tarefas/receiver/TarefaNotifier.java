@@ -25,7 +25,7 @@ public class TarefaNotifier extends BroadcastReceiver {
         Intent forwardIt = new Intent(context, MainActivity.class);
         forwardIt.putExtra("tarefa", tarefa);
 
-        final int requestCode = 0;
+        final int requestCode = R.string.app_name + tarefa.getId();
         return PendingIntent.getActivity(
                 context,
                 requestCode,
