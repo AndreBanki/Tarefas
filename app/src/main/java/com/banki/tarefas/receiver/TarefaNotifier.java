@@ -33,18 +33,6 @@ public class TarefaNotifier extends BroadcastReceiver {
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private PendingIntent criaIntentQueSeraDisparadoPelaNotificacao2(Context context, Tarefa tarefa) {
-        Intent forwardIt = new Intent("ABRIR_TAREFA");
-        forwardIt.putExtra("tarefa", tarefa);
-
-        final int requestCode = 0;
-        return PendingIntent.getBroadcast(
-                context,
-                requestCode,
-                forwardIt,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
     private void criaNotificacao(Context context, Tarefa tarefa, PendingIntent pendingIt) {
         NotificationCompat.Builder notif = new NotificationCompat.Builder(context)
                 .setTicker("Nova tarefa")
@@ -57,6 +45,7 @@ public class TarefaNotifier extends BroadcastReceiver {
 
         NotificationManager nManager;
         nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        nManager.notify(R.string.app_name, notif.build());
+        int uniqueNumber = R.string.app_name + tarefa.getId();
+        nManager.notify(uniqueNumber, notif.build());
     }
 }

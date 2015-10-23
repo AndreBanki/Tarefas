@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent("ALERTA_TAREFA");
         intent.putExtra("tarefa", tarefa);
 
-        final int requestCode = 0;
+        final int requestCode = R.string.app_name + tarefa.getId();
         return PendingIntent.getBroadcast(
                 MainActivity.this,
                 requestCode,
